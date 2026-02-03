@@ -1,36 +1,153 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚛 Transport CMD
 
-## Getting Started
+Real-time logistics command center for transport operations management.
 
-First, run the development server:
+## 🎯 Features
 
-```bash
+- **Dashboard Overview**: Real-time task statistics and team performance
+- **Category Tracking**: Inbound, Outbound, Internal, Project
+- **Team Performance**: Individual member stats and completion rates
+- **Performance Trends**: Monthly grade tracking visualization
+- **Notion Integration**: Direct API connection (no separate database)
+
+## 📦 Tech Stack
+
+- **Next.js 15** - React framework
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling
+- **Notion API** - Data source
+- **Recharts** - Performance visualization
+
+## 🚀 Setup Instructions
+
+### 1. Install Dependencies
+
+\`\`\`bash
+npm install
+\`\`\`
+
+### 2. Configure Notion
+
+1. Create a Notion Integration at https://www.notion.so/my-integrations
+2. Copy your **Internal Integration Token**
+3. Create a new Notion Database with these properties:
+
+| Property | Type | Options |
+|----------|------|---------|
+| **Name** | Title | - |
+| **Status** | Select | Done, In Progress, Pending, Blocked |
+| **Assignee** | Person | - |
+| **Priority** | Select | High, Medium, Low |
+| **Due Date** | Date | - |
+| **Category** | Select | **Inbound, Outbound, Internal, Project** |
+
+4. Share your database with the integration
+5. Copy the **Database ID** from the URL
+
+### 3. Environment Variables
+
+Create `.env.local` file:
+
+\`\`\`env
+NOTION_API_KEY=secret_xxxxxxxxxxxxx
+NOTION_DATABASE_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+\`\`\`
+
+### 4. Run Development Server
+
+\`\`\`bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+\`\`\`
+
+Open http://localhost:3000
+
+## 📊 API Endpoints
+
+- \`GET /api/notion?type=tasks\` - Fetch all tasks
+- \`GET /api/notion?type=performance\` - Fetch team performance
+
+## 🎨 Pages
+
+- \`/\` - Main Dashboard
+- \`/team\` - Team Performance Trends
+
+## 📁 Project Structure
+
+\`\`\`
+transport-cmd/
+├── src/
+│   ├── app/
+│   │   ├── page.tsx              # Dashboard
+│   │   ├── team/page.tsx         # Performance Trends
+│   │   ├── api/notion/route.ts   # API Routes
+│   │   └── layout.tsx
+│   ├── components/
+│   │   ├── StatCard.tsx
+│   │   ├── TaskCard.tsx
+│   │   └── TeamMemberCard.tsx
+│   ├── lib/
+│   │   └── notion.ts             # Notion API Client
+│   └── types/
+│       └── index.ts              # TypeScript Types
+└── package.json
+\`\`\`
+
+## 🔧 Customization
+
+### Add More Categories
+
+Edit \`src/types/index.ts\`:
+
+\`\`\`typescript
+category: 'Inbound' | 'Outbound' | 'Internal' | 'Project' | 'YourNewCategory';
+\`\`\`
+
+### Modify Performance Calculation
+
+Edit \`src/lib/notion.ts\` → \`calculatePerformance()\` function
+
+## 📝 License
+
+Private - Internal Use Only
+
+## 🐛 Troubleshooting
+
+### ❌ Problem: 404 Error or Blank Page
+
+**Solution**:
+```bash
+# Delete .next folder and restart
+rm -rf .next
+npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### ❌ Problem: "This page could not be found"
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Cause**: Next.js cache issue  
+**Solution**:
+```bash
+# Clear cache and reinstall
+rm -rf .next node_modules
+npm install
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### ❌ Problem: API returns 500 error
 
-## Learn More
+**Check**:
+1. Is `.env.local` configured correctly?
+2. Are Notion credentials valid?
+3. Is database shared with integration?
 
-To learn more about Next.js, take a look at the following resources:
+**💡 Development Mode**: The app will automatically use mock data if Notion credentials are not configured. Look for the yellow banner on the dashboard.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### ✅ Features in Development Mode
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+When running without Notion credentials:
+- ✅ 10 mock tasks covering all categories
+- ✅ 7 team members (2 Supervisors + 5 Staff)
+- ✅ Full UI functionality
+- ✅ Performance calculations
+- ✅ All statistics and charts
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Simply add your Notion credentials to `.env.local` when ready to connect real data!
