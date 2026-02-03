@@ -2,7 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
   webpack: (config, { isServer }) => {
-    // Fix for client-side fs module errors
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
